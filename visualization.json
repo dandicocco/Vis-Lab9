@@ -1,0 +1,53 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {"url": "https://api.covidtracking.com/v1/states/current.csv"},
+    "vconcat": [
+      {
+        "selection": {"brush": {"type": "interval"}},
+        "mark": "point",
+        "width": 700,
+        "height": 200,
+        "encoding": {
+          "x": {
+            "field": "positive", 
+            "type": "quantitative"
+          },
+          "y": 
+          {
+            "field": "death", 
+            "type": "quantitative"
+          },
+          "color": {
+            "condition": {
+              "selection": "brush",
+              "field": "dataQualityGrade", 
+              "type": "nominal"
+            },
+            "value":"grey"
+          }
+        }
+      },
+      {
+        "repeat": ["hospitalizedCumulative", "recovered"],
+        "columns": 1,
+        "spec": {
+          "transform": [{"filter": {"selection": "brush"}}],
+          "mark": "bar",
+          "width": 700,
+          "height": 200,
+          "encoding": {
+            "x": {
+              "bin": false, 
+              "field": "state", 
+              "type": "ordinal"
+            },
+            "y": {
+              "field": {"repeat": "repeat"}, 
+              "type": "quantitative"
+            }
+          }
+        }
+      }
+    ],
+    "config": {}
+  }
